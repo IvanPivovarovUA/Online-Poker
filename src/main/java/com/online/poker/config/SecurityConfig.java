@@ -32,22 +32,22 @@ public class SecurityConfig {
 	public UserDetailsService userDetailsService() {
 		UserDetails userDetails1 = User.withDefaultPasswordEncoder()
 			.username("Ivan")
-			.password("pas")
+			.password("p")
 			.roles("USER")
 			.build();
 		UserDetails userDetails2 = User.withDefaultPasswordEncoder()
 			.username("Maria")
-			.password("pas_2")
+			.password("password_2")
 			.roles("USER")
 			.build();
 		UserDetails userDetails3 = User.withDefaultPasswordEncoder()
 			.username("Gleb")
-			.password("pas_3")
+			.password("password_3")
 			.roles("USER")
 			.build();
 		UserDetails userDetails4 = User.withDefaultPasswordEncoder()
 			.username("Nikita")
-			.password("pas_4")
+			.password("password_4")
 			.roles("USER")
 			.build();
 

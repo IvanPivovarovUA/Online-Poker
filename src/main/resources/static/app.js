@@ -5,7 +5,11 @@ const stompClient = new StompJs.Client({
 stompClient.onConnect = (frame) => {
     console.log('Connected: ' + frame);
     stompClient.subscribe('/topic/greetings', (greeting) => {
-        showGreeting(JSON.parse(greeting.body));
+        showGreeting1(JSON.parse(greeting.body));
+    });
+
+    stompClient.subscribe('/queue/getuser', (greeting) => {
+        showGreeting2(JSON.parse(greeting.body));
     });
 
     sendName();
@@ -31,11 +35,16 @@ function sendName() {
         destination: "/app/hello",
         body: JSON.stringify({'name': "test sending messege123"})
     });
-    console.log("43553");
+
+}
+function getInfo() {
+    stompClient.publish({
+        destination: "/app/getinfo"
+    });
 }
 
-function showGreeting(message) {
-
+function showGreeting1(message) {
+    getInfo();
     // $("#greetings").append("<tr><td>" + message + "</td></tr>");
     console.log(message);
     $("#ontable").empty();
@@ -47,19 +56,18 @@ function showGreeting(message) {
     for (let i = 0; i < message.PlayersOnTable.length; i++) {
         $("#ontable").append(
             '<li><div id = "grop"><p>' + 
-            message.PlayersOnTable.Name +
-            message.PlayersOnTable.Balance +
+            message.PlayersOnTable[i].Name +
+            message.PlayersOnTable[i].Balance +
             '</p></div">'
             
             // + '<div id = "grop"><p>dg' + message.Bank + '</p></div"></li>'
         );
-        console.log("|<" + message.PlayersOnTable.length);
     }
     for (let i = 0; i < message.PlayersOnHall.length; i++) {
         $("#onhall").append(
             '<li><div id = "grop"><p>' + 
-            message.PlayersOnHall.Name +
-            message.PlayersOnHall.Balance +
+            message.PlayersOnHall[i].Name +
+            message.PlayersOnHall[i].Balance +
             '</p></div">'
             
         ); 
@@ -68,7 +76,7 @@ function showGreeting(message) {
 
 
     $("#bank").append(
-        "|" + message.Bank + "|"
+        "Bank: " + message.Bank
     );
     for (let i = 0; i < message.CardsOnTable.length; i++) {
         $("#grop2").append(
@@ -78,22 +86,32 @@ function showGreeting(message) {
 
     
 
-    $("#userinterface").append(
-        "<h3>" + message.Bank +"</h3>"
-    );
+    // $("#userinterface").append(
+    //     "<h3>" + message.Bank +"</h3>"
+    // );
 
-    $("#userinterface").append(
-        '<input type="submit" value="Raise"></form>'
-    );
+    // $("#userinterface").append(
+    //     '<input id = "send" type="submit" value="Raise"></form>'
+    // );
 
+    // $( "#send" ).click(() => getInfo());
 }
-
+function showGreeting2(message) {
+    console.log(message);
+    $("#userinterface").append(
+        "<h3>" + message.Name + message.Balance +"</h3>"
+    );
+    $("#userinterface").append(
+        '<input id = "send" type="submit" value="Raise"></form>'
+    );
+    $( "#send" ).click(() => getInfo());
+} 
 
 $(function () {
     connect();
 
     $("form").on('submit', (e) => e.preventDefault());///фигня шобы не обновлять страницу
-    $( "#send" ).click(() => sendName());
+    // $( "#send" ).click(() => sendName());
     
 });
 
