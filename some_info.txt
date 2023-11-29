@@ -1,6 +1,11 @@
         ~ Game in poker online ~
+            [Team]
+Іван Пивоваров - backend
+Нікіта Кудін - frontend
+Назаревcький Гліб - business logic
+Марія Пшенікова - business logic
 
-                [Sources]
+            [Sources for backend]
 Official doc:
     https://docs.spring.io/spring-framework/reference/index.html
 
@@ -12,8 +17,11 @@ Principal:
     https://www.springcloud.io/post/2022-02/spring-security-get-current-user/#gsc.tab=0
 
 Just @SendToUser:
-    https://dev.to/mokkapps/sending-message-to-specific-anonymous-user-on-spring-websocket-5dmo
-    https://stackoverflow.com/questions/26288166/spring-stomp-sendtouser-with-unauthenticated-user-not-working
+    https://docs.spring.io/spring-framework/reference/web/websocket/stomp/user-destination.html#page-title
+    Just add in js /user + /queue/get_user_interface = /user/queue/get_user_interface
+    https://for-each.dev/lessons/b/-spring-websockets-sendtouser
+    Как мы видим, @SendToUser указывает на « queue/errors », 
+    но сообщение будет отправлено на « /user/queue/errors ».
 
 SessionDisconnectEvent
     https://docs.spring.io/spring-framework/reference/web/websocket/stomp/application-context-events.html
@@ -24,6 +32,6 @@ SimpMessagingTemplate - After SessionDisconnectEvent:
     https://docs.spring.io/spring-framework/reference/web/websocket/stomp/handle-send.html#page-title
                         
                 
-                [Rules]
+            [Rules]
 https://youtu.be/W7oMSN7WGOo?si=DHe9WqDlvte1dFxQ
 

@@ -1,15 +1,15 @@
 const stompClient = new StompJs.Client({
-    brokerURL: 'ws://localhost:8080/gs-guide-websocket'
+    brokerURL: 'ws://localhost:8080/game-table'
 });
 
 stompClient.onConnect = (frame) => {
     console.log('Connected: ' + frame);
     stompClient.subscribe('/topic/greetings', (greeting) => {
-        showGreeting1(JSON.parse(greeting.body));
+        showGreeting(JSON.parse(greeting.body));
     });
 
-    stompClient.subscribe('/queue/getuser', (greeting) => {
-        showGreeting2(JSON.parse(greeting.body));
+    stompClient.subscribe('/user/queue/get_user_interface', (greeting2) => {
+        showUserInterface(JSON.parse(greeting2.body));
     });
 
     getInfo();
@@ -44,8 +44,10 @@ function getInfo() {
     });
 }
 
-function showGreeting1(message) {
+function showGreeting(message) {
     getInfo();
+
+
     // $("#greetings").append("<tr><td>" + message + "</td></tr>");
     console.log(message);
     $("#ontable").empty();
@@ -85,20 +87,12 @@ function showGreeting1(message) {
         );  
     }
 
-    
 
-    // $("#userinterface").append(
-    //     "<h3>" + message.Bank +"</h3>"
-    // );
-
-    // $("#userinterface").append(
-    //     '<input id = "send" type="submit" value="Raise"></form>'
-    // );
-
-    // $( "#send" ).click(() => getInfo());
 }
-function showGreeting2(message) {
+function showUserInterface(message) {
     console.log(message);
+    $("#userinterface").empty();
+
     $("#userinterface").append(
         "<h3>" + message.Name + message.Balance +"</h3>"
     );
@@ -115,4 +109,3 @@ $(function () {
     // $( "#send" ).click(() => sendName());
     
 });
-
