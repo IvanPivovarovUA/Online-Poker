@@ -1,0 +1,9 @@
+~ Game in poker online ~
+
+###Sources###
+https://docs.spring.io/spring-framework/reference/index.html
+https://youtu.be/7T-HnTE6v64?si=LoK8-TbyV8MgdITz
+https://youtu.be/TywlS9iAZCM?si=0UXQidcZKICObwsE
+
+###Rules###
+https://youtu.be/W7oMSN7WGOo?si=DHe9WqDlvte1dFxQ
