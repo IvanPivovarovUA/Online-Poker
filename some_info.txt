@@ -3,17 +3,26 @@
                 [Sources]
 Official doc:
     https://docs.spring.io/spring-framework/reference/index.html
+
 YouTube guid:
     https://youtu.be/7T-HnTE6v64?si=LoK8-TbyV8MgdITz
     https://youtu.be/TywlS9iAZCM?si=0UXQidcZKICObwsE
+
 Principal:
     https://www.springcloud.io/post/2022-02/spring-security-get-current-user/#gsc.tab=0
+
 Just @SendToUser:
     https://dev.to/mokkapps/sending-message-to-specific-anonymous-user-on-spring-websocket-5dmo
     https://stackoverflow.com/questions/26288166/spring-stomp-sendtouser-with-unauthenticated-user-not-working
+
 SessionDisconnectEvent
     https://docs.spring.io/spring-framework/reference/web/websocket/stomp/application-context-events.html
-                
+    https://docs.spring.io/spring-framework/reference/core/beans/context-introduction.html#context-functionality-events-annotation
+    https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/socket/messaging/AbstractSubProtocolEvent.html#getUser()  
+
+SimpMessagingTemplate - After SessionDisconnectEvent:
+    https://docs.spring.io/spring-framework/reference/web/websocket/stomp/handle-send.html#page-title
+                        
                 
                 [Rules]
 https://youtu.be/W7oMSN7WGOo?si=DHe9WqDlvte1dFxQ

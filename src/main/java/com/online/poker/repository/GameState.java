@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class GameState {
 
-	public ArrayList<Player> PlayersOnTable = new ArrayList<Player>();
-	public ArrayList<Player> PlayersOnHall = new ArrayList<Player>();
+	public ArrayList<User> PlayersOnTable = new ArrayList<User>();
+	public ArrayList<User> PlayersOnHall = new ArrayList<User>();
 	public ArrayList<Card> CardsOnTable = new ArrayList<Card>();
 	
 	public int BiggestBet;

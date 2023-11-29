@@ -12,6 +12,7 @@ stompClient.onConnect = (frame) => {
         showGreeting2(JSON.parse(greeting.body));
     });
 
+    getInfo();
     sendName();
 };
 
