@@ -14,6 +14,6 @@ public class GameState {
 	public int DilerId;
 	public int StepId;
 	
-	public int Bank;
+	public int Bank = 0;
 
 }

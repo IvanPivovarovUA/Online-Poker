@@ -12,8 +12,8 @@ stompClient.onConnect = (frame) => {
         showUserInterface(JSON.parse(greeting2.body));
     });
 
-    getInfo();
-    sendName();
+    // getInfo();
+    sendStep();
 };
 
 stompClient.onWebSocketError = (error) => {
@@ -31,7 +31,7 @@ function connect() {
     stompClient.activate();
 }
 
-function sendName() {
+function sendStep() {
     stompClient.publish({
         destination: "/app/hello",
         body: JSON.stringify({'name': "test sending messege123"})
@@ -59,8 +59,8 @@ function showGreeting(message) {
     for (let i = 0; i < message.PlayersOnTable.length; i++) {
         $("#ontable").append(
             '<li><div id = "grop"><p>' + 
-            message.PlayersOnTable[i].Name +
-            message.PlayersOnTable[i].Balance +
+            message.PlayersOnTable[i].name +
+            message.PlayersOnTable[i].balance +
             '</p></div">'
             
             // + '<div id = "grop"><p>dg' + message.Bank + '</p></div"></li>'
@@ -69,8 +69,8 @@ function showGreeting(message) {
     for (let i = 0; i < message.PlayersOnHall.length; i++) {
         $("#onhall").append(
             '<li><div id = "grop"><p>' + 
-            message.PlayersOnHall[i].Name +
-            message.PlayersOnHall[i].Balance +
+            message.PlayersOnHall[i].name +
+            message.PlayersOnHall[i].balance +
             '</p></div">'
             
         ); 
@@ -94,12 +94,13 @@ function showUserInterface(message) {
     $("#userinterface").empty();
 
     $("#userinterface").append(
-        "<h3>" + message.Name + message.Balance +"</h3>"
+        "<h3>" + message.Player.name + message.Player.balance +"</h3>"
     );
     $("#userinterface").append(
         '<input id = "send" type="submit" value="Raise"></form>'
     );
-    $( "#send" ).click(() => getInfo());
+    $( "#send" ).click(() => sendStep());
+
 } 
 
 $(function () {

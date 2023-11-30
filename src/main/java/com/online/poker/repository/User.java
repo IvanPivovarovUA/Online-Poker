@@ -1,13 +1,25 @@
 package com.online.poker.repository;
 import java.util.ArrayList;
 
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class User {
-    public int ID;
-    public String Name;
-    public int Balance;
+    private int Id;
+    private String Name;
+    private int Balance;
 
-    public ArrayList<Card> Cards;
+    // private ArrayList<Card> Cards;
+    public User() {
+
+    }
+    public User(int id, String name, int balance) {
+        this.Id = id;
+        this.Name = name;
+        this.Balance = balance;
+    }
 }
 
 
