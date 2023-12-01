@@ -6,20 +6,25 @@ import com.online.poker.repository.GameState;
 import com.online.poker.repository.PlayerInput;
 import com.online.poker.repository.Card;
 import com.online.poker.repository.User;
+import com.online.poker.repository.OutputUserInfo;
+
 import java.util.ArrayList;
 
 
 @Service
-public class BackendService {
+public class AccessService {
     //Set Data
+    public GameService gameService = new GameService();
     public GameState gameState = new GameState();
     private ArrayList<User> ALL_USERS = new ArrayList<User>();
 
-    public BackendService() {
-        ALL_USERS.add(new User(1,"Ivan"  ,1000));
-        ALL_USERS.add(new User(2,"Nikita",1000));
-        ALL_USERS.add(new User(3,"Gleb"  ,1000));
-        ALL_USERS.add(new User(4,"Maria" ,1000));
+    public AccessService() {
+        ALL_USERS.add(new User("Ivan"  ,1000));
+        ALL_USERS.add(new User("Nikita",1000));
+        ALL_USERS.add(new User("Gleb"  ,1000));
+        ALL_USERS.add(new User("Maria" ,1000));
+        gameState.StepId = -2;
+        gameState.BiggestBet = 0;
     }
     
     
@@ -71,12 +76,57 @@ public class BackendService {
     }
 
     //Step queue
-    public boolean permitToStep(String name) {
-        User user = find_by_name(name);
-        if (user.getId() == gameState.StepId) {
+    public boolean permit_to_step(String name, PlayerInput playerInput) {
+        if (playerInput.Act.equals("start")) {
+            gameService.game_start(gameState);
             return true;
+        }
+        
+
+
+        int index = check_ontable(name);
+
+        if (index == gameState.StepId) {
+
+
+            if (playerInput.Act.equals("check")) {
+                if (gameState.BiggestBet == gameState.PlayersBet.get(index)) {
+
+                    gameService.process_step(gameState);
+                    
+                    return true;
+                }else {
+                    return false;
+                }
+            }else {
+                
+                if (playerInput.Act.equals("call")) {
+                    gameService.process_step(gameState);
+                }
+                if (playerInput.Act.equals("bet")) {
+                    gameService.process_step(gameState, playerInput.Bet);
+                }
+
+               
+                return true;
+            }
+
+
+            // return true;
         }else {
             return false;
         }
     }
+    public void player_disconnect(String name) {
+        int index = check_ontable(name);
+
+        if (index != -1) {
+            gameState.FoldPlayers.set(
+                check_ontable(name),
+                "fl"
+            );
+        }
+
+    }
+
 }

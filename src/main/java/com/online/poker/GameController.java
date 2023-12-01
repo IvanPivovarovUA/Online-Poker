@@ -6,7 +6,7 @@ import com.online.poker.repository.PlayerInput;
 import com.online.poker.repository.Card;
 import com.online.poker.repository.User;
 import com.online.poker.repository.OutputUserInfo;
-import com.online.poker.service.BackendService;
+import com.online.poker.service.AccessService;
 
 import java.util.ArrayList;
 
@@ -28,9 +28,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 @Controller
 public class GameController {
+
     //Set Options Service and Data
     private SimpMessagingTemplate messagingTemplate;
-    private BackendService backendService = new BackendService();
+    private AccessService accessService = new AccessService();
     // private GameState gameState = new GameState();
     // private ArrayList<User> ALL_USERS = new ArrayList<User>();
     
@@ -48,18 +49,14 @@ public class GameController {
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         String name = event.getUser().getName();
 
-        int index_hall = backendService.check_onhall(name);
-        int index_table = backendService.check_ontable(name);
+        int index_hall = accessService.check_onhall(name);
+        int index_table = accessService.check_ontable(name);
         if (index_hall != -1) {
-            backendService.remove_user_from_gamestate(index_hall, "hall");
+            accessService.remove_user_from_gamestate(index_hall, "hall");
         }
-        if (index_table != -1) {
-            backendService.remove_user_from_gamestate(index_table, "table");
-        }
+        accessService.player_disconnect(name);
 
-
-
-        messagingTemplate.convertAndSend("/topic/greetings", backendService.gameState);
+        messagingTemplate.convertAndSend("/topic/greetings", accessService.gameState);
     }
 
     //HTTP links
@@ -72,8 +69,8 @@ public class GameController {
         String name = principal.getName();
 
 
-        if (backendService.check_onhall(name)  == -1 &&
-            backendService.check_ontable(name) == -1) 
+        if (accessService.check_onhall(name)  == -1 &&
+            accessService.check_ontable(name) == -1) 
         {
             return "table";
         }else {
@@ -86,27 +83,33 @@ public class GameController {
     @SendTo("/topic/greetings")
     public GameState greeting(Principal principal, PlayerInput playerInput) throws Exception {
         // Thread.sleep(1000); // simulated delay
- 
-        //Set on GameState
+        
         String name = principal.getName();
-        if (backendService.check_ontable(name) == -1) {
-            if (backendService.check_onhall(name) == -1) {
-                backendService.set_user_in_gamestate(name,"hall");
+
+        //Set on GameState
+        if (accessService.check_ontable(name) == -1) {
+            if (accessService.check_onhall(name) == -1) {
+                accessService.set_user_in_gamestate(name,"hall");
             }
         }
-
-        return backendService.gameState;
+        // System.out.println("dfgdfg");
+        accessService.permit_to_step(name,playerInput);
+        
+        
+        return accessService.gameState;
     }
 
     @MessageMapping("/getinfo")
     @SendToUser("/queue/get_user_interface")
-    public OutputUserInfo getUserInfo(Principal principal) {
+    public User getUserInfo(Principal principal) {
         //Get player info
         String name = principal.getName();
-        OutputUserInfo output = new OutputUserInfo();
-        output.Player = backendService.find_by_name(name);
-        output.Status = "only bet";
-        return output;
+
+        // OutputUserInfo output = new OutputUserInfo();
+        // output.Player = accessService.find_by_name(name);
+
+        
+        return accessService.find_by_name(name);
     }
 
 }
