@@ -77,17 +77,14 @@ public class AccessService {
 
     //Step queue
     public boolean permit_to_step(String name, PlayerInput playerInput) {
-        if (playerInput.Act.equals("start")) {
+        if (playerInput.Act.equals("start") && gameState.GameOver == true) {
             gameService.game_start(gameState);
+            gameState.GameOver = false;
             return true;
         }
-        
-
 
         int index = check_ontable(name);
-
         if (index == gameState.StepId) {
-
 
             if (playerInput.Act.equals("check")) {
                 if (gameState.BiggestBet == gameState.PlayersBet.get(index)) {
@@ -99,16 +96,17 @@ public class AccessService {
                     return false;
                 }
             }else {
-                
-                if (playerInput.Act.equals("call")) {
-                    gameService.process_step(gameState);
-                }
-                if (playerInput.Act.equals("bet")) {
-                    gameService.process_step(gameState, playerInput.Bet);
-                }
 
-               
-                return true;
+                if (gameState.GameOver == false) {
+                    if (playerInput.Act.equals("call")) {
+                        gameService.process_step(gameState);
+                    }
+                    if (playerInput.Act.equals("bet")) {
+                        gameService.process_step(gameState, playerInput.Bet);
+                    }
+                    return true;
+                }
+                return false;
             }
 
 
@@ -118,13 +116,18 @@ public class AccessService {
         }
     }
     public void player_disconnect(String name) {
-        int index = check_ontable(name);
-
-        if (index != -1) {
+        
+        int index_table = check_ontable(name);
+        if (index_table != -1) {
             gameState.FoldPlayers.set(
                 check_ontable(name),
                 "fl"
             );
+        }
+
+        int index_hall = check_onhall(name);
+        if (index_hall != -1) {
+            remove_user_from_gamestate(index_hall, "hall");
         }
 
     }
