@@ -27,7 +27,6 @@ public class AccessService {
         gameState.BiggestBet = 0;
     }
     
-    
     //Base operation for find
     public User find_by_name(String name) {
         User user = new User();
@@ -57,7 +56,7 @@ public class AccessService {
         return index;
     }
 
-    //Add or Remove from GameSate
+    //Add or Remove from GameState
     public void set_user_in_gamestate(String name, String hall_or_table) {
         if (hall_or_table == "hall") {
             gameState.PlayersOnHall.add(find_by_name(name));
@@ -74,13 +73,34 @@ public class AccessService {
             gameState.PlayersOnTable.remove(index);
         }
     }
+    public boolean check_all_fold() {
+        int index = gameState.FoldPlayers.size();
 
+        for (String fold: gameState.FoldPlayers) {
+            if (fold.equals("f") || fold.equals("fl")) {
+                index--;
+            }
+        }
+
+        if (index <= 0) {
+            return true;
+        }else {
+            return false;
+        }
+    }
     //Step queue
     public boolean permit_to_step(String name, PlayerInput playerInput) {
-        if (playerInput.Act.equals("start") && gameState.GameOver == true) {
-            gameService.game_start(gameState);
-            gameState.GameOver = false;
-            return true;
+
+        if (playerInput.Act.equals("start")) {
+            if (gameState.GameOver || check_all_fold()) {
+                gameService.game_start(gameState);
+                gameState.GameOver = false;
+                return true; 
+            }
+            if (gameState.FoldPlayers.get(gameState.StepId) != "p") {
+                gameService.move_stepid(gameState);
+            }
+
         }
 
         int index = check_ontable(name);
@@ -89,7 +109,7 @@ public class AccessService {
             if (playerInput.Act.equals("check")) {
                 if (gameState.BiggestBet == gameState.PlayersBet.get(index)) {
 
-                    gameService.process_step(gameState);
+                    gameService.put_money(gameState);
                     
                     return true;
                 }else {
@@ -99,10 +119,13 @@ public class AccessService {
 
                 if (gameState.GameOver == false) {
                     if (playerInput.Act.equals("call")) {
-                        gameService.process_step(gameState);
+                        gameService.put_money(gameState);
                     }
                     if (playerInput.Act.equals("bet")) {
-                        gameService.process_step(gameState, playerInput.Bet);
+                        gameService.put_money(gameState, playerInput.Bet);
+                    }
+                    if (playerInput.Act.equals("fold")) {
+                        gameService.fold(gameState);
                     }
                     return true;
                 }
@@ -116,7 +139,12 @@ public class AccessService {
         }
     }
     public void player_disconnect(String name) {
-        
+        PlayerInput playerInput = new PlayerInput();
+        playerInput.Act = "fold";
+        playerInput.Bet = 0;
+
+        permit_to_step(name, playerInput);
+
         int index_table = check_ontable(name);
         if (index_table != -1) {
             gameState.FoldPlayers.set(
@@ -129,6 +157,8 @@ public class AccessService {
         if (index_hall != -1) {
             remove_user_from_gamestate(index_hall, "hall");
         }
+
+        
 
     }
 

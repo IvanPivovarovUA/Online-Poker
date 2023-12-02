@@ -12,24 +12,44 @@ import java.util.ArrayList;
 
 public class GameService {
     CardDeck cardDeck = new CardDeck();
-    
 
     public void move_stepid(GameState gameState) {
         int size = gameState.PlayersOnTable.size();
-        gameState.CircleSize++;
-        gameState.StepId++;
-        if (gameState.StepId >= size) {
-            gameState.StepId = 0;
-        }
-        
+        int index;
+        int i = 0;
+        while (i < size) {
+            i++;
+
+            gameState.CircleSize++;
+            gameState.StepId++;
+
+            if (gameState.StepId >= size) {
+                gameState.StepId = 0;
+            }
+
+            index = gameState.StepId;
+            if (gameState.FoldPlayers.get(index).equals("p")) {
+                break;
+            }
+        }        
     }
 
-    public void process_step(GameState gameState) {
+    public void fold(GameState gameState) {
+        int index = gameState.StepId;
+
+        gameState.FoldPlayers.set(
+            index,
+            "f"
+        );
+        move_stepid(gameState);
+    }
+
+    public void put_money(GameState gameState) {
         call(gameState);
         move_stepid(gameState);
         end_round(gameState);
     }
-    public void process_step(GameState gameState, int desiredBet) {
+    public void put_money(GameState gameState, int desiredBet) {
         bet(gameState,desiredBet);
         move_stepid(gameState);
         end_round(gameState);
@@ -68,8 +88,8 @@ public class GameService {
         int size = gameState.PlayersOnTable.size();
         if (gameState.CircleSize >= size) {
             boolean end_test = true;
-            for (int b: gameState.PlayersBet) {
-                if (b != gameState.BiggestBet) {
+            for (int i = 0; i < size; i++) {
+                if (gameState.PlayersBet.get(i) != gameState.BiggestBet && gameState.FoldPlayers.get(i) == "p") {
                     end_test = false;
                 }
             }
@@ -102,7 +122,6 @@ public class GameService {
                     gameState.GameOver = true;
                 }
                 
-
             }
         }
     }
@@ -152,6 +171,7 @@ public class GameService {
 
             secret_cards.add(card_hand);
         }
+
         gameState.setPlayersCards(secret_cards);
     }
 }
