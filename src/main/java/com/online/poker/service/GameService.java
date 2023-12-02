@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class GameService {
     CardDeck cardDeck = new CardDeck();
+    WhoIsWinner whoIsWinner = new WhoIsWinner();
 
     public void move_stepid(GameState gameState) {
         int size = gameState.PlayersOnTable.size();
@@ -115,7 +116,9 @@ public class GameService {
                 }
                 if (card_number >= 5) {
                     //end
-                    int index = 0;
+                    int index = whoIsWinner.getWinner(gameState);
+                    // GameState.Winner = gameState.PlayersOnTable.get(index);
+                    System.out.println(gameState.PlayersOnTable.get(index));
                     gameState.OpenCards = gameState.getPlayersCards();
                     gameState.PlayersOnTable.get(index).Balance += gameState.Bank;
                     gameState.Bank = 0;
@@ -125,7 +128,7 @@ public class GameService {
             }
         }
     }
-
+    
 
 
     public void game_start(GameState gameState){
@@ -150,6 +153,7 @@ public class GameService {
         gameState.StepId = 0;
         gameState.BiggestBet = 0;
         gameState.Bank = 0;
+        // gameState.Winner = null;
 
 
         cardDeck.restoreDeck();

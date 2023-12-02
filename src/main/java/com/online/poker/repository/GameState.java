@@ -1,7 +1,11 @@
 package com.online.poker.repository;
 import java.util.ArrayList;
 
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class GameState {
 	
 
@@ -37,6 +41,7 @@ public class GameState {
 	public int DilerId;
 	public int CircleSize = 0;
 	public boolean GameOver = true;
+	// public User Winner = null;
 
 
 
