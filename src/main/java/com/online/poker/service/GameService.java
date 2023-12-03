@@ -119,8 +119,8 @@ public class GameService {
                     int index = whoIsWinner.getWinner(gameState);
                     // GameState.Winner = gameState.PlayersOnTable.get(index);
                     // System.out.println(gameState.PlayersOnTable.get(index));
-                    System.out.println("Winner: " + index);
-                    System.out.println(gameState.getPlayersCards().get(index));
+                    // System.out.println("Winner: " + index);
+                    System.out.println(gameState.getPlayersCards().get(index).get(0));
 
                     
                     gameState.OpenCards = gameState.getPlayersCards();

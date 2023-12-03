@@ -29,39 +29,28 @@ public class WhoIsWinner {
             cardsSums.add(sum);
         }
 
-        int max = bestCombinations.get(0);
+
+        int maxIndex = 0;
+
+        int BestComb = bestCombinations.get(0);
+        int MaxSum = cardsSums.get(0);
 
         for (int i = 1; i < bestCombinations.size(); i++) {
-            if (bestCombinations.get(i) > max) {
-                max = bestCombinations.get(i);
-            }
-        }
-
-        int max1 = bestCombinations.get(0);
-        int max2 = cardsSums.get(0);
-        int maxIndex = -1;
-
-        for (int i = 0; i < bestCombinations.size(); i++) {
-            int value1 = bestCombinations.get(i);
-            int value2 = cardsSums.get(i);
-
-            if (value1 >= max1) {
-                max1 = value1;
-            }
-
-            if (value2 >= max2) {
-                max2 = value2;
-            }
-
-            if (value1 == max1 && value2 == max2) {
+            if (bestCombinations.get(i) > BestComb) {
                 maxIndex = i;
+                BestComb = bestCombinations.get(i);
+                MaxSum = cardsSums.get(0);
+            }else if (bestCombinations.get(i) == BestComb && cardsSums.get(i) > MaxSum) {
+                maxIndex = i;
+                BestComb = bestCombinations.get(i);
+                MaxSum = cardsSums.get(i);
             }
         }
-
 
         for (int best : bestCombinations) {
             System.out.println(best);
         }
+        System.out.println("Winner: " + maxIndex);
 
         return maxIndex;
     }
