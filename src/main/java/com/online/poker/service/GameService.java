@@ -118,7 +118,11 @@ public class GameService {
                     //end
                     int index = whoIsWinner.getWinner(gameState);
                     // GameState.Winner = gameState.PlayersOnTable.get(index);
-                    System.out.println(gameState.PlayersOnTable.get(index));
+                    // System.out.println(gameState.PlayersOnTable.get(index));
+                    System.out.println("Winner: " + index);
+                    System.out.println(gameState.getPlayersCards().get(index));
+
+                    
                     gameState.OpenCards = gameState.getPlayersCards();
                     gameState.PlayersOnTable.get(index).Balance += gameState.Bank;
                     gameState.Bank = 0;
@@ -132,7 +136,7 @@ public class GameService {
 
 
     public void game_start(GameState gameState){
-        // System.out.println(gameState.FoldPlayers);
+
         for (int i = gameState.PlayersOnTable.size(); i > 0; i--) {
             if (gameState.FoldPlayers.get(0).equals("fl") == false) {
                 
@@ -148,7 +152,6 @@ public class GameService {
         gameState.FoldPlayers = new ArrayList<String>();
         // gameState.setPlayersCards(new ArrayList<ArrayList<Card>>());
         gameState.OpenCards = new ArrayList<ArrayList<Card>>();
-
         gameState.CardsOnTable = new ArrayList<Card>();
         gameState.StepId = 0;
         gameState.BiggestBet = 0;
@@ -157,8 +160,9 @@ public class GameService {
 
 
         cardDeck.restoreDeck();
-        ArrayList<ArrayList<Card>> secret_cards = new ArrayList<ArrayList<Card>>();
 
+        ArrayList<ArrayList<Card>> secret_cards = new ArrayList<ArrayList<Card>>();
+        ArrayList<Card> card_hand;
         for (int i = gameState.PlayersOnHall.size(); i > 0; i--){
             
             gameState.PlayersOnTable.add(gameState.PlayersOnHall.get(0));
@@ -168,13 +172,20 @@ public class GameService {
             gameState.FoldPlayers.add("p");
             
             
-            // gameState.OpenCards.add();
-            ArrayList<Card> card_hand = new ArrayList<Card>();
-            card_hand.add(cardDeck.drawRandomCard());
-            card_hand.add(cardDeck.drawRandomCard());
+            
 
+            card_hand = new ArrayList<Card>();
+            card_hand.add(cardDeck.drawRandomCard());
+            card_hand.add(cardDeck.drawRandomCard());
             secret_cards.add(card_hand);
+
+            
+            card_hand = new ArrayList<Card>();
+            card_hand.add(new Card(0,'N'));
+            card_hand.add(new Card(0,'N'));
+            gameState.OpenCards.add(card_hand);
         }
+
 
         gameState.setPlayersCards(secret_cards);
     }

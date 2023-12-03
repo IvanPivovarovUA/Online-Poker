@@ -46,13 +46,13 @@ public class GameState {
 
 
     // сетери + гетери
-    public ArrayList<ArrayList<Card>> getPlayersCards(){
-        return PlayersCards;
-    }
+    // public ArrayList<ArrayList<Card>> getPlayersCards(){
+    //     return PlayersCards;
+    // }
 
-    public void setPlayersCards(ArrayList<ArrayList<Card>> PlayersCards){
-        this.PlayersCards = PlayersCards;
-    }
+    // public void setPlayersCards(ArrayList<ArrayList<Card>> PlayersCards){
+    //     this.PlayersCards = PlayersCards;
+    // }
 
     // public ArrayList<Card> getCardsOnTable(){
     //     return CardsOnTable;

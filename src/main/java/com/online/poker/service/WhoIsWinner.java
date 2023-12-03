@@ -1,9 +1,11 @@
 package com.online.poker.service;
 
 import com.online.poker.repository.GameState;
+import com.online.poker.repository.PlayerInput;
 import com.online.poker.repository.Card;
 import com.online.poker.repository.User;
-
+import com.online.poker.repository.OutputUserInfo;
+import com.online.poker.service.AccessService;
 
 import java.util.*;
 
@@ -20,7 +22,6 @@ public class WhoIsWinner {
             ArrayList<Card> cardsTogether = new ArrayList<>();
             cardsTogether.addAll(cardsOnTable);
             cardsTogether.addAll(playerHand);
-            sortCards(cardsTogether);
             int result = evaluateHand(cardsTogether);
             bestCombinations.add(result);
 
@@ -80,6 +81,7 @@ public class WhoIsWinner {
     }
 
     public int evaluateHand(ArrayList<Card> cardsTogether) {
+        sortCards(cardsTogether);
         if (isRoyalFlush(cardsTogether)) {
             return 10;
         } else if (isStraightFlush(cardsTogether)) {
@@ -128,34 +130,39 @@ public class WhoIsWinner {
     }
 
     private boolean isRoyalFlush(ArrayList<Card> cardsTogether) {
+
         boolean has10 = false, hasJ = false, hasQ = false, hasK = false, hasA = false;
-        char suit = '\0';
 
-        for (Card card : cardsTogether) {
-            if (suit == '\0') {
-                suit = card.Suit;
-            }
+        ArrayList<Character> cardSuits = new ArrayList<>();
+        cardSuits.add('C');
+        cardSuits.add('H');
+        cardSuits.add('D');
+        cardSuits.add('S');
 
-            if (card.Suit == suit) {
-                switch (card.Number) {
-                    case 10:
-                        has10 = true;
-                        break;
-                    case 11:
-                        hasJ = true;
-                        break;
-                    case 12:
-                        hasQ = true;
-                        break;
-                    case 13:
-                        hasK = true;
-                        break;
-                    case 1:
-                        hasA = true;
-                        break;
+        for (Character suit : cardSuits){
+            for (Card card : cardsTogether) {
+                if (card.Suit == suit) {
+                    switch (card.Number) {
+                        case 10:
+                            has10 = true;
+                            break;
+                        case 11: // Валет
+                            hasJ = true;
+                            break;
+                        case 12: // Дама
+                            hasQ = true;
+                            break;
+                        case 13: // Король
+                            hasK = true;
+                            break;
+                        case 1: // Туз
+                            hasA = true;
+                            break;
+                    }
                 }
             }
         }
+
         return has10 && hasJ && hasQ && hasK && hasA;
     }
 
