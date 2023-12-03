@@ -6,6 +6,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
 
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/app.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -20,18 +21,6 @@
     <ul id="ontable"></ul>
   </div>
 
-
-  <!-- <div id="table">
-    <h1 id="bank">Bank = 1000$</h1>
-    <div id="grop2">
-      <h1>5♠</h1>
-      <h1>K♥</h1>
-      <h1>10♦</h1>
-      <h1>Q♣</h1>
-      <h1>A♣</h1>
-    </div>
-  </div>
--->
   <div id="table">
     <div id="desk">
       <img class="desk_table" src="images/others/table.jpg">
@@ -42,18 +31,8 @@
       </div>
     </div>
 
-
     <div class="usercard_block">
 
-    </div>
-    <div class="timer_user animatable">
-      <svg>
-        <circle cx="50%" cy="50%" r="35" />
-        <circle class="second_circle" cx="50%" cy="50%" r="35" pathLength="1" />
-        <text x="40" y="45" text-anchor="middle">
-          <tspan id="timeLeft_user"></tspan>
-        </text>
-      </svg>
     </div>
     <div class="userprofile">
       <div class="userprofile_first_block">
@@ -66,30 +45,10 @@
       </div>
     </div>
     <div id="userinterface">
-      <form id="ffold_form">
-        <input class="button" id="fold_button" type="submit" value="fold">
-      </form>
 
-      <form id="check_form">
-        <input class="button" id="check" type="submit" value="check">
-      </form>
-
-      <form id="bet_form">
-        <input class="button" id="bet" type="submit" value="bet">
-      </form>
-
-      <form id="call_form">
-        <input class="button" id="call" type="submit" value="call">
-      </form>
-
-      <form id="send_form">
-        <input class="button" id="start" type="submit" value="Start">
-      </form>
-      <input id="timer_status" type="hidden" value="off">
       <div id="move"></div>
     </div>
-    <script src="js/app.js"></script>
-    <script src="js/timer.js"></script>
+
 </body>
 
 </html>

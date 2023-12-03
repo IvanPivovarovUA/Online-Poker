@@ -15,6 +15,7 @@ stompClient.onConnect = (frame) => {
 
     });
 
+    //getInfo();
     sendStep(1);
 };
 
@@ -87,6 +88,8 @@ function showGreeting(message) {
     $("#grop2").empty();
 
     for (let i = 0; i < message.PlayersOnTable.length; i++) {
+        //var plaeyr_step = message.StepId;
+
         if (message.StepId == i) {
             let ontabaleelem = document.querySelector('#ontable');
             let onhallelem = document.querySelector('#onhall');
@@ -96,7 +99,7 @@ function showGreeting(message) {
 
             if (user_name != message.PlayersOnTable[i].name) {
                 $("#ontable").append(
-                    '<li><div class="players_profile"><div class="userprofile_first_block"><h3 class="playerdata userinterface_nickname">' +
+                    '<li><div class="players_profile player_step"><div class="userprofile_first_block"><h3 class="playerdata userinterface_nickname">' +
                     message.PlayersOnTable[i].name +
                     '</h3><h3 class="playerdata userinterface_balance">' +
                     message.PlayersOnTable[i].balance +
@@ -105,6 +108,7 @@ function showGreeting(message) {
                     message.PlayersBet[i] +
                     '</h3></div></div></li>'
                 );
+
             }
 
             if ((message.OpenCards[i][0].Number == 0 || message.OpenCards[i][0].Suit == 'N') || (message.OpenCards[i][1].Number == 0 || message.OpenCards[i][1].Suit == 'N')) {
@@ -185,7 +189,6 @@ function showGreeting(message) {
 
 }
 
-
 function showUserInterface(message) {
     var card_flag = true;
     console.log(message);
@@ -196,6 +199,13 @@ function showUserInterface(message) {
     $('.userprofile .userinterface_nickname').append(message.Player.name);
     $('.userprofile .userinterface_balance').append(message.Player.balance);
     $('.userprofile .userinterface_bet_value').append(message.Bet);
+
+    if (message.StepTest == true) {
+        $('.userprofile').addClass('player_step');
+    } else {
+        $('.userprofile').removeClass('player_step');
+    }
+
 
     for (let i = 0; i < message.Cards.length; i++) {
         if (message.Cards[i].Number == 0 || message.Cards[i].Suit == 'N') {
@@ -213,8 +223,8 @@ function showUserInterface(message) {
         $('.usercard_block').empty();
     }
 
-
     $("#userinterface").empty();
+
     $("#userinterface").append(
         '<input id = "bet" type="submit" value="bet"></form>'
     );
@@ -227,12 +237,11 @@ function showUserInterface(message) {
     $("#userinterface").append(
         '<input id = "start" type="submit" value="Start"></form>'
     );
-    
-    $( "#bet" ).click(() => sendStep(1));
-    $( "#call" ).click(() => sendStep(2));
-    $( "#check" ).click(() => sendStep(3));
-    $( "#start" ).click(() => sendStep(4));
 
+    $("#bet").click(() => sendStep(1));
+    $("#call").click(() => sendStep(2));
+    $("#check").click(() => sendStep(3));
+    $("#start").click(() => sendStep(4));
 
     return message.Player.name;
 }

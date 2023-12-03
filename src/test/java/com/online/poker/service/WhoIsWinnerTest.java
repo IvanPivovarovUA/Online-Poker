@@ -1,4 +1,12 @@
-package org.example;
+package com.online.poker.service;
+
+import com.online.poker.repository.GameState;
+import com.online.poker.repository.PlayerInput;
+import com.online.poker.repository.Card;
+import com.online.poker.repository.User;
+import com.online.poker.repository.OutputUserInfo;
+import com.online.poker.service.AccessService;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -229,7 +237,7 @@ public class WhoIsWinnerTest {
         gameState.setPlayersCards(playersCards);
         gameState.setCardsOnTable(cardsOnTable);
 
-        int result = service.getWinner(gameState, playersCards);
+        int result = service.getWinner(gameState);
 
         // Assert
         assertEquals(1, result);
