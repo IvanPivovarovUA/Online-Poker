@@ -18,6 +18,8 @@ public class AccessService {
     public GameState gameState = new GameState();
     private ArrayList<User> ALL_USERS = new ArrayList<User>();
 
+    public ArrayList<ArrayList<Card>> PLAYERS_CARDS = new ArrayList<ArrayList<Card>>();
+
     public AccessService() {
         ALL_USERS.add(new User("Ivan"  ,1000));
         ALL_USERS.add(new User("Nikita",1000));
@@ -93,7 +95,8 @@ public class AccessService {
 
         if (playerInput.Act.equals("start")) {
             if (gameState.GameOver || check_all_fold()) {
-                gameService.game_start(gameState);
+                gameService.game_start(gameState,PLAYERS_CARDS);
+                System.out.println(PLAYERS_CARDS);
                 gameState.GameOver = false;
                 return true; 
             }
@@ -109,7 +112,7 @@ public class AccessService {
             if (playerInput.Act.equals("check")) {
                 if (gameState.BiggestBet == gameState.PlayersBet.get(index)) {
 
-                    gameService.put_money(gameState);
+                    gameService.put_money(gameState,PLAYERS_CARDS);
                     
                     return true;
                 }else {
@@ -119,13 +122,13 @@ public class AccessService {
 
                 if (gameState.GameOver == false) {
                     if (playerInput.Act.equals("call")) {
-                        gameService.put_money(gameState);
+                        gameService.put_money(gameState,PLAYERS_CARDS);
                     }
                     if (playerInput.Act.equals("bet")) {
-                        gameService.put_money(gameState, playerInput.Bet);
+                        gameService.put_money(gameState,PLAYERS_CARDS,playerInput.Bet);
                     }
                     if (playerInput.Act.equals("fold")) {
-                        gameService.fold(gameState);
+                        gameService.fold(gameState,PLAYERS_CARDS);
                     }
                     return true;
                 }
@@ -169,10 +172,8 @@ public class AccessService {
         if (index != -1) {
             output.Bet = gameState.PlayersBet.get(index);
             
-            ArrayList<ArrayList<Card>> secret_cards = gameState.getPlayersCards();
-            output.Cards = secret_cards.get(index);
+            output.Cards = PLAYERS_CARDS.get(index);
 
-            
 
             if (gameState.StepId == index) {
                 output.StepTest = true;

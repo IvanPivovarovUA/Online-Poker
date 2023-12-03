@@ -12,7 +12,7 @@ public class GameState {
 	// місце у всіх списках
 	public int StepId;
 
-	private ArrayList<ArrayList<Card>> PlayersCards = new ArrayList<ArrayList<Card>>();
+	// private ArrayList<ArrayList<Card>> PlayersCards = new ArrayList<ArrayList<Card>>();
 	public ArrayList<ArrayList<Card>> OpenCards = new ArrayList<ArrayList<Card>>();
 	
 	//у кого f того ти ігнориш він просто весить 

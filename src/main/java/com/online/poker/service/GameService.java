@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class GameService {
     CardDeck cardDeck = new CardDeck();
-    WhoIsWinner whoIsWinner = new WhoIsWinner();
+    // WhoIsWinner whoIsWinner = new WhoIsWinner();
 
     public void move_stepid(GameState gameState) {
         int size = gameState.PlayersOnTable.size();
@@ -35,7 +35,7 @@ public class GameService {
         }        
     }
 
-    public void fold(GameState gameState) {
+    public void fold(GameState gameState, ArrayList<ArrayList<Card>> PLAYERS_CARDS) {
         int index = gameState.StepId;
 
         gameState.FoldPlayers.set(
@@ -43,17 +43,18 @@ public class GameService {
             "f"
         );
         move_stepid(gameState);
+        end_round(gameState,PLAYERS_CARDS);
     }
 
-    public void put_money(GameState gameState) {
+    public void put_money(GameState gameState,ArrayList<ArrayList<Card>> PLAYERS_CARDS) {
         call(gameState);
         move_stepid(gameState);
-        end_round(gameState);
+        end_round(gameState,PLAYERS_CARDS);
     }
-    public void put_money(GameState gameState, int desiredBet) {
+    public void put_money(GameState gameState,ArrayList<ArrayList<Card>> PLAYERS_CARDS, int desiredBet) {
         bet(gameState,desiredBet);
         move_stepid(gameState);
-        end_round(gameState);
+        end_round(gameState,PLAYERS_CARDS);
     }
 
     public void call(GameState gameState) {
@@ -85,7 +86,7 @@ public class GameService {
         gameState.Bank += desiredBet;
     }
 
-    public void end_round(GameState gameState) {
+    public void end_round(GameState gameState, ArrayList<ArrayList<Card>> PLAYERS_CARDS) {
         int size = gameState.PlayersOnTable.size();
         if (gameState.CircleSize >= size) {
             boolean end_test = true;
@@ -115,15 +116,11 @@ public class GameService {
                     gameState.CardsOnTable.add(cardDeck.drawRandomCard());
                 }
                 if (card_number >= 5) {
-                    //end
-                    int index = whoIsWinner.getWinner(gameState);
-                    // GameState.Winner = gameState.PlayersOnTable.get(index);
-                    // System.out.println(gameState.PlayersOnTable.get(index));
-                    // System.out.println("Winner: " + index);
-                    System.out.println(gameState.getPlayersCards().get(index).get(0));
+                    gameState.OpenCards = PLAYERS_CARDS;
 
-                    
-                    gameState.OpenCards = gameState.getPlayersCards();
+                    // int index = whoIsWinner.getWinner(gameState);
+                    int index = 0;
+      
                     gameState.PlayersOnTable.get(index).Balance += gameState.Bank;
                     gameState.Bank = 0;
                     gameState.GameOver = true;
@@ -135,7 +132,7 @@ public class GameService {
     
 
 
-    public void game_start(GameState gameState){
+    public void game_start(GameState gameState, ArrayList<ArrayList<Card>> PLAYERS_CARDS){
 
         for (int i = gameState.PlayersOnTable.size(); i > 0; i--) {
             if (gameState.FoldPlayers.get(0).equals("fl") == false) {
@@ -147,12 +144,12 @@ public class GameService {
             gameState.FoldPlayers.remove(0);
         }
 
-        gameState.PlayersOnTable = new ArrayList<User>();
-        gameState.PlayersBet = new ArrayList<Integer>();
-        gameState.FoldPlayers = new ArrayList<String>();
+        gameState.PlayersOnTable.clear();
+        gameState.PlayersBet.clear();
+        gameState.FoldPlayers.clear();
         // gameState.setPlayersCards(new ArrayList<ArrayList<Card>>());
-        gameState.OpenCards = new ArrayList<ArrayList<Card>>();
-        gameState.CardsOnTable = new ArrayList<Card>();
+        gameState.OpenCards.clear();
+        gameState.CardsOnTable.clear();
         gameState.StepId = 0;
         gameState.BiggestBet = 0;
         gameState.Bank = 0;
@@ -161,8 +158,8 @@ public class GameService {
 
         cardDeck.restoreDeck();
 
-        ArrayList<ArrayList<Card>> secret_cards = new ArrayList<ArrayList<Card>>();
-        ArrayList<Card> card_hand;
+        PLAYERS_CARDS.clear();
+        ArrayList<Card> card_hand = new ArrayList<Card>();
         for (int i = gameState.PlayersOnHall.size(); i > 0; i--){
             
             gameState.PlayersOnTable.add(gameState.PlayersOnHall.get(0));
@@ -174,19 +171,19 @@ public class GameService {
             
             
 
-            card_hand = new ArrayList<Card>();
+            card_hand.clear();
             card_hand.add(cardDeck.drawRandomCard());
             card_hand.add(cardDeck.drawRandomCard());
-            secret_cards.add(card_hand);
+            PLAYERS_CARDS.add(card_hand);
 
             
-            card_hand = new ArrayList<Card>();
+            card_hand.clear();
             card_hand.add(new Card(0,'N'));
             card_hand.add(new Card(0,'N'));
             gameState.OpenCards.add(card_hand);
         }
+        System.out.println(PLAYERS_CARDS);
 
-
-        gameState.setPlayersCards(secret_cards);
+        // gameState.setPlayersCards(secret_cards);
     }
 }
